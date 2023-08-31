@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
+import * as Font from 'expo-font';
+import { Ionicons } from '@expo/vector-icons';
+import { Asset } from 'expo-asset';
 import { Text, View } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
@@ -12,9 +15,10 @@ export default function App() {
       try {
         // pre-load fonts, call APIs, etc
         // 강의의 startLoading과 동일하게 동작
+        await Font.loadAsync(Ionicons.font);
       } catch (error) {
         // 강의의 onError와 동일하게 동작
-        consolewarn(error);
+        console.warn(error);
       } finally {
         // 강의의 onFinish와 동일하게 동작
         setReady(true);
