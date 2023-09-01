@@ -26,7 +26,11 @@ const ScreenThree = ({ navigation: { setOptions } }) => (
 const NativeStack = createStackNavigator();
 
 const Stack = () => (
-  <NativeStack.Navigator>
+  <NativeStack.Navigator
+    screenOptions={{
+      headerBackTitleVisible: false,
+      animation: 'fade',
+    }}>
     <NativeStack.Screen
       name='One'
       component={ScreenOne}
