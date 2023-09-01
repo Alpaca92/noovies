@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text } from 'react-native';
 import styled from 'styled-components/native';
 
 const Btn = styled.TouchableOpacity`
   flex: 1;
   justify-content: 'center';
   align-items: 'center';
+  background-color: ${({ theme }) => theme.mainBgColor};
 `;
 
 const Movies = ({ navigation: { navigate } }) => (
