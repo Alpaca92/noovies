@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text, TouchableOpacity } from 'react-native';
 
 const ScreenOne = ({ navigation: { navigate } }) => (
@@ -12,18 +12,13 @@ const ScreenTwo = ({ navigation: { navigate } }) => (
     <Text>go to three</Text>
   </TouchableOpacity>
 );
-const ScreenThree = ({ navigation: { setOptions } }) => (
-  <TouchableOpacity
-    onPress={() =>
-      setOptions({
-        title: 'Changed title !',
-      })
-    }>
+const ScreenThree = ({ navigation: { navigate } }) => (
+  <TouchableOpacity onPress={() => navigate('Tabs', { screen: 'Tv' })}>
     <Text>Change Title</Text>
   </TouchableOpacity>
 );
 
-const NativeStack = createStackNavigator();
+const NativeStack = createNativeStackNavigator();
 
 const Stack = () => (
   <NativeStack.Navigator
