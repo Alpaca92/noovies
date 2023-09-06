@@ -4,13 +4,42 @@ import styled from 'styled-components/native';
 import Swiper from 'react-native-swiper';
 import { ActivityIndicator, Dimensions } from 'react-native';
 import Slide from '../components/Slide';
+import Poster from '../components/Poster';
 
-const ScrollView = styled.ScrollView``;
+const Container = styled.ScrollView``;
 
 const Loader = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
+`;
+
+const ListTitle = styled.Text`
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 30px;
+`;
+
+const TrendingScroll = styled.ScrollView`
+  margin-top: 20px;
+`;
+
+const Movie = styled.View`
+  width: 100px;
+  margin-right: 20px;
+  align-items: center;
+`;
+
+const Title = styled.Text`
+  color: white;
+  font-weight: 600;
+  margin-top: 7px;
+  margin-bottom: 5px;
+`;
+
+const Votes = styled.Text`
+  color: rgba(255, 255, 255, 0.6);
 `;
 
 const { height: SCREEN_HIGHT } = Dimensions.get('window');
@@ -86,9 +115,13 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = ({
       <ActivityIndicator />
     </Loader>
   ) : (
-    <ScrollView>
+    <Container>
       <Swiper
-        containerStyle={{ width: '100%', height: SCREEN_HIGHT / 4 }}
+        containerStyle={{
+          width: '100%',
+          height: SCREEN_HIGHT / 4,
+          marginBottom: 30,
+        }}
         loop
         horizontal
         showsButtons={false}
@@ -106,7 +139,25 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = ({
           />
         ))}
       </Swiper>
-    </ScrollView>
+      <ListTitle>Trending Movies</ListTitle>
+      <TrendingScroll
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingLeft: 30,
+        }}
+      >
+        {trending.map((movie) => (
+          <Movie key={movie.id}>
+            <Poster path={movie.poster_path} />
+            <Title numberOfLines={1} ellipsizeMode="tail">
+              {movie.original_title}
+            </Title>
+            <Votes>⭐ {movie.vote_average}</Votes>
+          </Movie>
+        ))}
+      </TrendingScroll>
+    </Container>
   );
 };
 
