@@ -42,6 +42,36 @@ const Votes = styled.Text`
   color: rgba(255, 255, 255, 0.6);
 `;
 
+const ListContainer = styled.View`
+  margin-bottom: 40px;
+`;
+
+const HMovie = styled.View`
+  padding: 0px 30px;
+  flex-direction: row;
+  margin-bottom: 30px;
+`;
+
+const HColumn = styled.View`
+  margin-left: 15px;
+  width: 80%;
+`;
+
+const Release = styled.Text`
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+`;
+
+const Overview = styled.Text`
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 8px;
+  width: 80%;
+`;
+
+const ComingSoon = styled(ListTitle)`
+  margin-bottom: 10px;
+`;
+
 const { height: SCREEN_HIGHT } = Dimensions.get('window');
 
 const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = ({
@@ -139,24 +169,51 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = ({
           />
         ))}
       </Swiper>
-      <ListTitle>Trending Movies</ListTitle>
-      <TrendingScroll
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingLeft: 30,
-        }}
-      >
-        {trending.map((movie) => (
-          <Movie key={movie.id}>
-            <Poster path={movie.poster_path} />
+      <ListContainer>
+        <ListTitle>Trending Movies</ListTitle>
+        <TrendingScroll
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingLeft: 30,
+          }}
+        >
+          {trending.map((movie) => (
+            <Movie key={movie.id}>
+              <Poster path={movie.poster_path} />
+              <Title numberOfLines={1} ellipsizeMode="tail">
+                {movie.original_title}
+              </Title>
+              <Votes>
+                {movie.vote_average > 0
+                  ? `⭐ ${movie.vote_average}`
+                  : `Coming soon`}
+              </Votes>
+            </Movie>
+          ))}
+        </TrendingScroll>
+      </ListContainer>
+      <ComingSoon>Coming soon</ComingSoon>
+      {upcoming.map((movie) => (
+        <HMovie key={movie.id}>
+          <Poster path={movie.poster_path} />
+          <HColumn>
             <Title numberOfLines={1} ellipsizeMode="tail">
               {movie.original_title}
             </Title>
-            <Votes>⭐ {movie.vote_average}</Votes>
-          </Movie>
-        ))}
-      </TrendingScroll>
+            <Release>
+              {new Date(movie.release_date).toLocaleDateString('ko-KR', {
+                year: '2-digit',
+                month: 'short',
+                day: '2-digit',
+              })}
+            </Release>
+            <Overview numberOfLines={3} ellipsizeMode="tail">
+              {movie.overview}
+            </Overview>
+          </HColumn>
+        </HMovie>
+      ))}
     </Container>
   );
 };
