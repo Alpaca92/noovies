@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import Swiper from 'react-native-swiper';
-import { ActivityIndicator, Dimensions } from 'react-native';
+import { ActivityIndicator, Dimensions, RefreshControl } from 'react-native';
 import Slide from '../components/Slide';
 import Poster from '../components/Poster';
 
@@ -81,6 +81,7 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = ({
   const [upcoming, setUpcoming] = useState([]);
   const [trending, setTrending] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const getNowPlaying = async () => {
     const url = 'https://api.themoviedb.org/3/movie/now_playing?language=ko-KR';
@@ -140,12 +141,22 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = ({
     getData();
   }, []);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    getData();
+    setRefreshing(false);
+  };
+
   return loading ? (
     <Loader>
       <ActivityIndicator />
     </Loader>
   ) : (
-    <Container>
+    <Container
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <Swiper
         containerStyle={{
           width: '100%',
