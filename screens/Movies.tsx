@@ -93,6 +93,8 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
   ) : (
     <Container
       data={upcoming}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
       keyExtractor={(item) => item.id + ''}
       ListHeaderComponent={
         <>
