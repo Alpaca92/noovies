@@ -6,7 +6,7 @@ import styled from 'styled-components/native';
 import HMedia from '../components/HMedia';
 import Slide from '../components/Slide';
 import VMedia from '../components/VMedia';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { moviesApi } from '../api';
 
 const Container = styled.FlatList``;
@@ -47,22 +47,25 @@ const HSeperator = styled.View`
 `;
 
 const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
-  const [refreshing, setRefreshing] = useState(false);
-  const { isLoading: nowPlayingLoading, data: nowPlayingData } = useQuery(
-    ['nowPlaying'],
-    moviesApi.nowPlaying,
-  );
-  const { isLoading: upcomingLoading, data: upcomingData } = useQuery(
-    ['upcoming'],
-    moviesApi.upcoming,
-  );
-  const { isLoading: trendingLoading, data: trendingData } = useQuery(
-    ['trending'],
-    moviesApi.trending,
-  );
+  const queryClient = useQueryClient();
+  const {
+    isLoading: nowPlayingLoading,
+    data: nowPlayingData,
+    isRefetching: isRefetchingNowPlaying,
+  } = useQuery(['movies', 'nowPlaying'], moviesApi.nowPlaying);
+  const {
+    isLoading: upcomingLoading,
+    data: upcomingData,
+    isRefetching: isRefetchingUpcoming,
+  } = useQuery(['movies', 'upcoming'], moviesApi.upcoming);
+  const {
+    isLoading: trendingLoading,
+    data: trendingData,
+    isRefetching: isRefetchingTrending,
+  } = useQuery(['movies', 'trending'], moviesApi.trending);
 
   const onRefresh = async () => {
-    // do something...
+    queryClient.refetchQueries(['movies']);
   };
 
   const renderVMedia = ({ item }) => (
@@ -84,6 +87,8 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
 
   const movieKeyExtractor = (item) => item.id + '';
   const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
+  const refreshing =
+    isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingTrending;
 
   return loading ? (
     <Loader>
