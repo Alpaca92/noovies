@@ -8,14 +8,9 @@ import Slide from '../components/Slide';
 import VMedia from '../components/VMedia';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { MoviesResponse, moviesApi } from '../api';
+import Loader from './../components/Loader';
 
 const Container = styled.FlatList``;
-
-const Loader = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -91,9 +86,7 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
     isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingTrending;
 
   return loading ? (
-    <Loader>
-      <ActivityIndicator />
-    </Loader>
+    <Loader />
   ) : (
     <Container
       data={upcomingData?.results}
