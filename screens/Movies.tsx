@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import React from 'react';
 import { ActivityIndicator, Dimensions } from 'react-native';
 import Swiper from 'react-native-swiper';
 import styled from 'styled-components/native';
@@ -7,7 +7,7 @@ import HMedia from '../components/HMedia';
 import Slide from '../components/Slide';
 import VMedia from '../components/VMedia';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { moviesApi } from '../api';
+import { MoviesResponse, moviesApi } from '../api';
 
 const Container = styled.FlatList``;
 
@@ -52,17 +52,17 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
     isLoading: nowPlayingLoading,
     data: nowPlayingData,
     isRefetching: isRefetchingNowPlaying,
-  } = useQuery(['movies', 'nowPlaying'], moviesApi.nowPlaying);
+  } = useQuery<MoviesResponse>(['movies', 'nowPlaying'], moviesApi.nowPlaying);
   const {
     isLoading: upcomingLoading,
     data: upcomingData,
     isRefetching: isRefetchingUpcoming,
-  } = useQuery(['movies', 'upcoming'], moviesApi.upcoming);
+  } = useQuery<MoviesResponse>(['movies', 'upcoming'], moviesApi.upcoming);
   const {
     isLoading: trendingLoading,
     data: trendingData,
     isRefetching: isRefetchingTrending,
-  } = useQuery(['movies', 'trending'], moviesApi.trending);
+  } = useQuery<MoviesResponse>(['movies', 'trending'], moviesApi.trending);
 
   const onRefresh = async () => {
     queryClient.refetchQueries(['movies']);
@@ -96,7 +96,7 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
     </Loader>
   ) : (
     <Container
-      data={upcomingData.results}
+      data={upcomingData?.results}
       onRefresh={onRefresh}
       refreshing={refreshing}
       keyExtractor={movieKeyExtractor}
@@ -117,7 +117,7 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
               height: SCREEN_HEIGHT / 4,
             }}
           >
-            {nowPlayingData.results.map((movie) => (
+            {nowPlayingData?.results.map((movie) => (
               <Slide
                 key={movie.id}
                 backdropPath={movie.backdrop_path}
@@ -131,7 +131,7 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
           <ListContainer>
             <ListTitle>Trending Movies</ListTitle>
             <TrendingScroll
-              data={trendingData.results}
+              data={trendingData?.results}
               horizontal
               showsHorizontalScrollIndicator={false}
               keyExtractor={movieKeyExtractor}

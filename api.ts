@@ -1,6 +1,33 @@
 const API_KEY = '10923b261ba94d897ac6b81148314a3f';
 const BASE_URL = 'https://api.themoviedb.org/3';
 
+interface BaseResponse {
+  page: number;
+  total_results: number;
+  total_pages: number;
+}
+
+export interface Movie {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+export interface MoviesResponse extends BaseResponse {
+  results: Movie[];
+}
+
 const trending = () =>
   fetch(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`).then((res) =>
     res.json(),
