@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useState } from 'react';
 import { Dimensions } from 'react-native';
 import Swiper from 'react-native-swiper';
 import styled from 'styled-components/native';
@@ -44,6 +44,7 @@ const HSeperator = styled.View`
 
 const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
   const queryClient = useQueryClient();
+  const [refreshing, setRefreshing] = useState(false);
   const {
     isLoading: nowPlayingLoading,
     data: nowPlayingData,
@@ -61,7 +62,9 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
   } = useQuery<MoviesResponse>(['movies', 'trending'], moviesApi.trending);
 
   const onRefresh = async () => {
-    queryClient.refetchQueries(['movies']);
+    setRefreshing(true);
+    await queryClient.refetchQueries(['movies']);
+    setRefreshing(false);
   };
 
   const renderVMedia = ({ item }) => (
@@ -83,8 +86,6 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
 
   const movieKeyExtractor = (item) => item.id + '';
   const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
-  const refreshing =
-    isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingTrending;
 
   return loading ? (
     <Loader />
