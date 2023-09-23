@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import { ActivityIndicator, Dimensions } from 'react-native';
+import { Dimensions } from 'react-native';
 import Swiper from 'react-native-swiper';
 import styled from 'styled-components/native';
 import HMedia from '../components/HMedia';
@@ -9,6 +9,7 @@ import VMedia from '../components/VMedia';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { MoviesResponse, moviesApi } from '../api';
 import Loader from './../components/Loader';
+import HList from '../components/HList';
 
 const Container = styled.FlatList``;
 
@@ -121,18 +122,9 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
               />
             ))}
           </Swiper>
-          <ListContainer>
-            <ListTitle>Trending Movies</ListTitle>
-            <TrendingScroll
-              data={trendingData?.results}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={movieKeyExtractor}
-              contentContainerStyle={{ paddingHorizontal: 30 }}
-              ItemSeparatorComponent={VSeperator}
-              renderItem={renderVMedia}
-            />
-          </ListContainer>
+          {trendingData ? (
+            <HList title="trending Movies" data={trendingData?.results} />
+          ) : null}
           <ComingSoonTitle>Coming soon</ComingSoonTitle>
         </>
       }
